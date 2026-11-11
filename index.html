@@ -1,112 +1,14 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#102b46">
-  <title>GeoCadastre | Touahria Radhwane</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10243a"><title>GeoCadastre | TOUAHRIA RADHWANE</title><link rel="stylesheet" href="assets/css/style.css"></head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#">
-    <span class="brand-mark">G</span>
-    <span><b>GeoCadastre</b><small>TOUAHRIA RADHWANE · Gestion cadastrale</small></span>
-  </a>
-  <div class="top-actions">
-    <span id="saveState" class="save-state"><i></i> Sauvegarde locale active</span>
-    <button class="btn btn-outline" id="connectExcel">Lier mon fichier Excel</button>
-    <button class="btn btn-primary" id="exportExcel">Exporter Excel</button>
-  </div>
-</header>
-
-<main class="shell">
-  <section class="welcome">
-    <div><p class="eyebrow">ESPACE PERSONNEL</p><h1>Tableau de bord</h1>
-      <p class="sub">Centralisez vos dossiers cadastraux, consultations et interventions.</p></div>
-    <button class="btn btn-primary btn-add" id="addFile">＋ Nouveau dossier</button>
-  </section>
-
-  <section class="stats">
-    <article class="stat"><span class="stat-symbol blue">▤</span><div><small>Total dossiers</small><strong id="statTotal">0</strong></div></article>
-    <article class="stat"><span class="stat-symbol green">✓</span><div><small>Terminés</small><strong id="statDone">0</strong></div></article>
-    <article class="stat"><span class="stat-symbol amber">◷</span><div><small>En cours</small><strong id="statProgress">0</strong></div></article>
-    <article class="stat"><span class="stat-symbol red">!</span><div><small>En retard</small><strong id="statLate">0</strong></div></article>
-    <article class="stat"><span class="stat-symbol violet">↗</span><div><small>Interventions</small><strong id="statActions">0</strong></div></article>
-  </section>
-
-  <section class="panel">
-    <div class="panel-heading"><div><h2>Registre des dossiers</h2><p>Recherche par IL_NO_NAT, organisme, opération ou demandeur.</p></div>
-      <span class="counter" id="resultCount">0 dossier</span></div>
-    <div class="filters">
-      <input id="searchInput" type="search" placeholder="⌕  Rechercher un dossier...">
-      <select id="statusFilter"><option value="">Tous les statuts</option><option>Nouveau</option><option>En cours</option><option>En attente</option><option>Urgent</option><option>Terminé</option></select>
-      <select id="operationFilter"><option value="">Toutes les opérations</option><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select>
-      <button class="btn btn-soft" id="resetFilters">Réinitialiser</button>
-    </div>
-    <div class="table-scroll">
-      <table><thead><tr><th>N° ordre</th><th>IL_NO_NAT</th><th>Organisme</th><th>Opération</th><th>Demandeur</th><th>Réception</th><th>Statut</th><th>Relance</th><th>Actions</th></tr></thead>
-      <tbody id="fileRows"><tr><td colspan="9" class="empty">Aucun dossier. Cliquez sur « Nouveau dossier » pour commencer.</td></tr></tbody></table>
-    </div>
-  </section>
-
-  <section class="bottom-grid">
-    <article class="panel"><div class="panel-heading"><div><h2>Relances à venir</h2><p>Les prochaines échéances enregistrées.</p></div></div><div id="upcomingList" class="activity-list"><p class="empty">Aucune relance à venir.</p></div></article>
-    <article class="panel"><div class="panel-heading"><div><h2>Dernières interventions</h2><p>Historique de vos consultations et actions.</p></div></div><div id="recentList" class="activity-list"><p class="empty">Aucune intervention enregistrée.</p></div></article>
-  </section>
-
-  <section class="panel data-panel">
-    <div><h2>Gestion des données</h2><p>Les données sont conservées dans ce navigateur. Vous pouvez aussi les synchroniser avec un fichier Excel que vous choisissez.</p></div>
-    <div class="data-actions">
-      <label class="btn btn-soft file-label">Importer Excel<input id="importExcel" type="file" accept=".xlsx,.xls,.csv" hidden></label>
-      <button class="btn btn-outline" id="backupJson">Sauvegarde JSON</button>
-      <button class="btn btn-danger-soft" id="clearData">Effacer les données locales</button>
-    </div>
-    <p class="hint" id="excelHint">Aucun fichier Excel lié. Cliquez sur « Lier mon fichier Excel » pour choisir/créer votre classeur GeoCadastre_Data.xlsx.</p>
-  </section>
-  <footer>GeoCadastre · Touahria Radhwane · Application web personnelle</footer>
-</main>
-
-<div class="overlay" id="fileDialog" aria-hidden="true"><section class="dialog">
-  <div class="dialog-head"><div><p class="eyebrow">REGISTRE CADASTRAL</p><h2 id="dialogTitle">Nouveau dossier</h2></div><button class="x-close" data-close="fileDialog">×</button></div>
-  <form id="fileForm" class="form-grid">
-    <input type="hidden" id="recordId">
-    <label>N° d'ordre<input id="orderNo"></label>
-    <label>Organisme<input id="organization" placeholder="Administration, géomètre expert..."></label>
-    <label class="span-2">IL_NO_NAT <em>*</em><input id="ilNoNat" required></label>
-    <label>Type d'opération<select id="operation"><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select></label>
-    <label>Statut<select id="status"><option>Nouveau</option><option>En cours</option><option>En attente</option><option>Urgent</option><option>Terminé</option></select></label>
-    <label>Date de réception<input id="received" type="date"></label>
-    <label>Délai (jours)<input id="delay" type="number" min="1" value="10"></label>
-    <label>Avancement (%)<input id="progress" type="number" min="0" max="100" value="0"></label>
-    <label>Demandeur / ingénieur<input id="requester"></label>
-    <label>Lien / chemin du dossier<input id="path" placeholder="Chemin ou référence numérique"></label>
-    <label>Dernière action<input id="lastAction"></label>
-    <label>Prochaine étape<input id="nextAction"></label>
-    <label>Date de relance<input id="followup" type="date"></label>
-    <label class="span-2">Observation / note<textarea id="notes" rows="3"></textarea></label>
-    <div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="fileDialog">Annuler</button><button class="btn btn-primary">Enregistrer le dossier</button></div>
-  </form>
-</section></div>
-
-<div class="overlay" id="actionDialog" aria-hidden="true"><section class="dialog">
-  <div class="dialog-head"><div><p class="eyebrow">TRAÇABILITÉ</p><h2>Nouvelle intervention</h2><p class="dialog-sub" id="actionReference"></p></div><button class="x-close" data-close="actionDialog">×</button></div>
-  <form id="actionForm" class="form-grid">
-    <input type="hidden" id="actionRecordId">
-    <label>Date de l'action<input id="actionDate" type="date" required></label>
-    <label>Demandeur / interlocuteur<input id="actionRequester"></label>
-    <label class="span-2">Action effectuée <em>*</em><input id="actionName" required placeholder="Consultation, vérification, traitement..."></label>
-    <label class="span-2">Résultat / état obtenu<textarea id="actionResult" rows="2"></textarea></label>
-    <label class="span-2">Prochaine action<textarea id="actionNext" rows="2"></textarea></label>
-    <label>Date de relance<input id="actionFollowup" type="date"></label>
-    <label class="span-2">Observation<textarea id="actionObservation" rows="2"></textarea></label>
-    <div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="actionDialog">Annuler</button><button class="btn btn-primary">Enregistrer l'intervention</button></div>
-  </form>
-</section></div>
-
-<div class="toast" id="toast" role="status"></div>
-<!-- SheetJS permet de lire et générer les classeurs Excel. Une connexion Internet est nécessaire pour charger cette bibliothèque. -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="assets/js/app.js"></script>
-</body>
-</html>
+<div id="modeGate" class="gate"><div class="gate-card"><div class="brand-mark">G</div><p class="eyebrow">ESPACE PROFESSIONNEL</p><h1>TOUAHRIA RADHWANE</h1><h2>Ingénieur Principal du Cadastre</h2><p class="muted">Choisissez le mode de stockage pour cette session.</p><div class="mode-options"><button class="mode-card" data-mode="excel"><span class="mode-icon">▤</span><b>Excel local</b><small>Classeur sur cet appareil</small></button><button class="mode-card" data-mode="google"><span class="mode-icon">☁</span><b>Google Sheets</b><small>Accès depuis plusieurs appareils</small></button></div><button id="gateSettings" class="link-btn">Configurer Google Sheets</button><p class="tiny">Vous pourrez changer de mode à tout moment depuis la barre supérieure.</p></div></div>
+<header class="topbar"><a class="brand" href="#"><span class="brand-mark">G</span><span><b>GeoCadastre</b><small>TOUAHRIA RADHWANE · Ingénieur Principal du Cadastre</small></span></a><div class="top-actions"><span id="saveState" class="save-state"><i></i> Local</span><button class="btn btn-outline" id="changeMode">Mode de stockage</button><button class="btn btn-outline" id="settingsBtn">Paramètres</button><button class="btn btn-primary" id="exportExcel">Exporter Excel</button></div></header>
+<main class="shell"><section class="welcome"><div><p class="eyebrow">TABLEAU DE BORD PROFESSIONNEL</p><h1>Suivi des dossiers cadastraux</h1><p class="sub">Centralisez les dossiers, consultations, intervenants, documents et opérations.</p></div><button class="btn btn-primary btn-add" id="addFile">＋ Nouveau dossier</button></section>
+<section class="stats"><article class="stat"><span class="stat-symbol blue">▤</span><div><small>Total dossiers</small><strong id="statTotal">0</strong></div></article><article class="stat"><span class="stat-symbol green">✓</span><div><small>Terminés</small><strong id="statDone">0</strong></div></article><article class="stat"><span class="stat-symbol amber">◷</span><div><small>En cours</small><strong id="statProgress">0</strong></div></article><article class="stat"><span class="stat-symbol red">!</span><div><small>En retard</small><strong id="statLate">0</strong></div></article><article class="stat"><span class="stat-symbol violet">↗</span><div><small>Interventions</small><strong id="statActions">0</strong></div></article></section>
+<section class="panel"><div class="panel-heading"><div><h2>Registre des dossiers</h2><p>Recherche par IL_NO_NAT, organisme, opération ou demandeur.</p></div><span class="counter" id="resultCount">0 dossier</span></div><div class="filters"><input id="searchInput" type="search" placeholder="⌕ Rechercher un dossier..."><select id="statusFilter"><option value="">Tous les statuts</option><option>Nouveau</option><option>En cours</option><option>Urgent</option><option>En retard</option><option>Terminé</option></select><select id="operationFilter"><option value="">Toutes les opérations</option><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select><button class="btn btn-soft" id="resetFilters">Réinitialiser</button></div><div class="table-scroll"><table><thead><tr><th>N° ordre</th><th>IL_NO_NAT</th><th>Organisme</th><th>Opération</th><th>Demandeur</th><th>Réception</th><th>Échéance</th><th>Statut automatique</th><th>Actions</th></tr></thead><tbody id="fileRows"></tbody></table></div></section>
+<section class="bottom-grid"><article class="panel"><div class="panel-heading"><div><h2>Relances à venir</h2><p>Prochaines échéances et rappels.</p></div></div><div id="upcomingList" class="activity-list"></div></article><article class="panel"><div class="panel-heading"><div><h2>Dernières interventions</h2><p>Historique récent des actions enregistrées.</p></div></div><div id="recentList" class="activity-list"></div></article></section>
+<section class="panel data-panel"><div><h2>Gestion des données</h2><p id="storageDescription">Choisissez un mode de stockage depuis la barre supérieure.</p></div><div class="data-actions"><label class="btn btn-soft file-label">Importer Excel<input id="importExcel" type="file" accept=".xlsx,.xls,.csv" hidden></label><button class="btn btn-outline" id="backupJson">Sauvegarde JSON</button><button class="btn btn-outline" id="connectExcel">Lier / créer un classeur Excel</button><button class="btn btn-danger-soft" id="clearData">Effacer les données locales</button></div><p class="hint" id="excelHint">Excel : choisissez un classeur pour enregistrer automatiquement lorsque le navigateur le permet. Google Sheets : configurez l'URL Apps Script.</p></section><footer>GeoCadastre Pro · TOUAHRIA RADHWANE · Application personnelle de suivi cadastral</footer></main>
+<div class="overlay" id="fileDialog"><section class="dialog"><div class="dialog-head"><div><p class="eyebrow">REGISTRE CADASTRAL</p><h2 id="dialogTitle">Nouveau dossier</h2></div><button class="x-close" data-close="fileDialog">×</button></div><form id="fileForm" class="form-grid"><input type="hidden" id="recordId"><label>N° d'ordre<input id="orderNo"></label><label>Organisme<input id="organization" placeholder="Administration, étude notariale..."></label><label class="span-2">IL_NO_NAT / Référence <em>*</em><input id="ilNoNat" required></label><label>Type d'opération<select id="operation"><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select></label><label>Date de réception<input id="received" type="date" required></label><label>Délai de traitement (jours)<input id="delay" type="number" min="1" value="10" required></label><label>Demandeur / ingénieur<input id="requester"></label><label class="span-2">Lien / chemin / référence du dossier<input id="path" placeholder="Chemin du fichier ou référence numérique"></label><label class="span-2">Observation initiale<textarea id="notes" rows="3"></textarea></label><div class="notice span-2">Le statut est calculé automatiquement à partir de la date de réception et du délai. Pour classer le dossier « Terminé », utilisez le bouton de clôture dans son carnet de suivi.</div><div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="fileDialog">Annuler</button><button class="btn btn-primary">Enregistrer le dossier</button></div></form></section></div>
+<div class="overlay" id="notebookDialog"><section class="dialog dialog-wide"><div class="dialog-head"><div><p class="eyebrow">CARNET DE SUIVI PROFESSIONNEL</p><h2 id="bookTitle">Dossier</h2><p class="dialog-sub" id="bookMeta"></p></div><button class="x-close" data-close="notebookDialog">×</button></div><div class="book-toolbar"><span id="bookStatus" class="status-pill">Nouveau</span><button class="btn btn-outline" id="editCurrent">Modifier les informations</button><button class="btn btn-success" id="completeCurrent">Clôturer le dossier</button></div><nav class="tabs"><button class="tab active" data-tab="overview">Synthèse</button><button class="tab" data-tab="contacts">Intervenants</button><button class="tab" data-tab="documents">Documents</button><button class="tab" data-tab="work">Travaux & observations</button><button class="tab" data-tab="history">Historique</button></nav><div id="bookContent" class="book-content"></div></section></div>
+<div class="overlay" id="settingsDialog"><section class="dialog"><div class="dialog-head"><div><p class="eyebrow">CONFIGURATION</p><h2>Paramètres de stockage</h2></div><button class="x-close" data-close="settingsDialog">×</button></div><form id="settingsForm" class="form-grid"><label class="span-2">URL de l'application Web Google Apps Script<input id="googleUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></label><label class="span-2">رمز الحماية / Secret partagé<input id="googleToken" type="password" placeholder="Le même code que dans Apps Script"></label><p class="hint span-2">Liez votre Google Sheet en déployant le script fourni dans le dossier google-apps-script. L'identifiant du classeur fourni est déjà prérempli dans le script.</p><div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="settingsDialog">Annuler</button><button class="btn btn-primary">Enregistrer</button></div></form></section></div>
+<div class="toast" id="toast" role="status"></div><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/app.js"></script></body></html>
