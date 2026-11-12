@@ -1,14 +1,563 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10243a"><title>GeoCadastre | TOUAHRIA RADHWANE</title><link rel="stylesheet" href="assets/css/style.css"></head>
+<html lang="fr" dir="ltr" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1628">
+  <meta name="description" content="GeoCadastre Pro – Application professionnelle de suivi des dossiers cadastraux. TOUAHRIA RADHWANE, Ingénieur d'État en Sciences Géodésiques et Travaux Topographiques, spécialité Cadastre.">
+  <meta name="author" content="TOUAHRIA RADHWANE">
+
+  <!-- Geodetic Crosshair Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a1628'/><circle cx='16' cy='16' r='10.5' fill='none' stroke='%2326c6da' stroke-width='1' opacity='.45'/><circle cx='16' cy='16' r='6.5' fill='none' stroke='%232196f3' stroke-width='1.5'/><circle cx='16' cy='16' r='2' fill='%2326c6da'/><line x1='16' y1='4' x2='16' y2='10' stroke='%232196f3' stroke-width='2' stroke-linecap='round'/><line x1='16' y1='22' x2='16' y2='28' stroke='%232196f3' stroke-width='2' stroke-linecap='round'/><line x1='4' y1='16' x2='10' y2='16' stroke='%232196f3' stroke-width='2' stroke-linecap='round'/><line x1='22' y1='16' x2='28' y2='16' stroke='%232196f3' stroke-width='2' stroke-linecap='round'/></svg>">
+
+  <title>GeoCadastre Pro | TOUAHRIA RADHWANE</title>
+
+  <!-- Google Fonts: Inter (Latin/French/English) + Cairo (Arabic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
 <body>
-<div id="modeGate" class="gate"><div class="gate-card"><div class="brand-mark">G</div><p class="eyebrow">ESPACE PROFESSIONNEL</p><h1>TOUAHRIA RADHWANE</h1><h2>Ingénieur Principal du Cadastre</h2><p class="muted">Choisissez le mode de stockage pour cette session.</p><div class="mode-options"><button class="mode-card" data-mode="excel"><span class="mode-icon">▤</span><b>Excel local</b><small>Classeur sur cet appareil</small></button><button class="mode-card" data-mode="google"><span class="mode-icon">☁</span><b>Google Sheets</b><small>Accès depuis plusieurs appareils</small></button></div><button id="gateSettings" class="link-btn">Configurer Google Sheets</button><p class="tiny">Vous pourrez changer de mode à tout moment depuis la barre supérieure.</p></div></div>
-<header class="topbar"><a class="brand" href="#"><span class="brand-mark">G</span><span><b>GeoCadastre</b><small>TOUAHRIA RADHWANE · Ingénieur Principal du Cadastre</small></span></a><div class="top-actions"><span id="saveState" class="save-state"><i></i> Local</span><button class="btn btn-outline" id="changeMode">Mode de stockage</button><button class="btn btn-outline" id="settingsBtn">Paramètres</button><button class="btn btn-primary" id="exportExcel">Exporter Excel</button></div></header>
-<main class="shell"><section class="welcome"><div><p class="eyebrow">TABLEAU DE BORD PROFESSIONNEL</p><h1>Suivi des dossiers cadastraux</h1><p class="sub">Centralisez les dossiers, consultations, intervenants, documents et opérations.</p></div><button class="btn btn-primary btn-add" id="addFile">＋ Nouveau dossier</button></section>
-<section class="stats"><article class="stat"><span class="stat-symbol blue">▤</span><div><small>Total dossiers</small><strong id="statTotal">0</strong></div></article><article class="stat"><span class="stat-symbol green">✓</span><div><small>Terminés</small><strong id="statDone">0</strong></div></article><article class="stat"><span class="stat-symbol amber">◷</span><div><small>En cours</small><strong id="statProgress">0</strong></div></article><article class="stat"><span class="stat-symbol red">!</span><div><small>En retard</small><strong id="statLate">0</strong></div></article><article class="stat"><span class="stat-symbol violet">↗</span><div><small>Interventions</small><strong id="statActions">0</strong></div></article></section>
-<section class="panel"><div class="panel-heading"><div><h2>Registre des dossiers</h2><p>Recherche par IL_NO_NAT, organisme, opération ou demandeur.</p></div><span class="counter" id="resultCount">0 dossier</span></div><div class="filters"><input id="searchInput" type="search" placeholder="⌕ Rechercher un dossier..."><select id="statusFilter"><option value="">Tous les statuts</option><option>Nouveau</option><option>En cours</option><option>Urgent</option><option>En retard</option><option>Terminé</option></select><select id="operationFilter"><option value="">Toutes les opérations</option><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select><button class="btn btn-soft" id="resetFilters">Réinitialiser</button></div><div class="table-scroll"><table><thead><tr><th>N° ordre</th><th>IL_NO_NAT</th><th>Organisme</th><th>Opération</th><th>Demandeur</th><th>Réception</th><th>Échéance</th><th>Statut automatique</th><th>Actions</th></tr></thead><tbody id="fileRows"></tbody></table></div></section>
-<section class="bottom-grid"><article class="panel"><div class="panel-heading"><div><h2>Relances à venir</h2><p>Prochaines échéances et rappels.</p></div></div><div id="upcomingList" class="activity-list"></div></article><article class="panel"><div class="panel-heading"><div><h2>Dernières interventions</h2><p>Historique récent des actions enregistrées.</p></div></div><div id="recentList" class="activity-list"></div></article></section>
-<section class="panel data-panel"><div><h2>Gestion des données</h2><p id="storageDescription">Choisissez un mode de stockage depuis la barre supérieure.</p></div><div class="data-actions"><label class="btn btn-soft file-label">Importer Excel<input id="importExcel" type="file" accept=".xlsx,.xls,.csv" hidden></label><button class="btn btn-outline" id="backupJson">Sauvegarde JSON</button><button class="btn btn-outline" id="connectExcel">Lier / créer un classeur Excel</button><button class="btn btn-danger-soft" id="clearData">Effacer les données locales</button></div><p class="hint" id="excelHint">Excel : choisissez un classeur pour enregistrer automatiquement lorsque le navigateur le permet. Google Sheets : configurez l'URL Apps Script.</p></section><footer>GeoCadastre Pro · TOUAHRIA RADHWANE · Application personnelle de suivi cadastral</footer></main>
-<div class="overlay" id="fileDialog"><section class="dialog"><div class="dialog-head"><div><p class="eyebrow">REGISTRE CADASTRAL</p><h2 id="dialogTitle">Nouveau dossier</h2></div><button class="x-close" data-close="fileDialog">×</button></div><form id="fileForm" class="form-grid"><input type="hidden" id="recordId"><label>N° d'ordre<input id="orderNo"></label><label>Organisme<input id="organization" placeholder="Administration, étude notariale..."></label><label class="span-2">IL_NO_NAT / Référence <em>*</em><input id="ilNoNat" required></label><label>Type d'opération<select id="operation"><option>Consultations</option><option>Partage</option><option>Fusion</option><option>Rectification</option><option>Création</option></select></label><label>Date de réception<input id="received" type="date" required></label><label>Délai de traitement (jours)<input id="delay" type="number" min="1" value="10" required></label><label>Demandeur / ingénieur<input id="requester"></label><label class="span-2">Lien / chemin / référence du dossier<input id="path" placeholder="Chemin du fichier ou référence numérique"></label><label class="span-2">Observation initiale<textarea id="notes" rows="3"></textarea></label><div class="notice span-2">Le statut est calculé automatiquement à partir de la date de réception et du délai. Pour classer le dossier « Terminé », utilisez le bouton de clôture dans son carnet de suivi.</div><div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="fileDialog">Annuler</button><button class="btn btn-primary">Enregistrer le dossier</button></div></form></section></div>
-<div class="overlay" id="notebookDialog"><section class="dialog dialog-wide"><div class="dialog-head"><div><p class="eyebrow">CARNET DE SUIVI PROFESSIONNEL</p><h2 id="bookTitle">Dossier</h2><p class="dialog-sub" id="bookMeta"></p></div><button class="x-close" data-close="notebookDialog">×</button></div><div class="book-toolbar"><span id="bookStatus" class="status-pill">Nouveau</span><button class="btn btn-outline" id="editCurrent">Modifier les informations</button><button class="btn btn-success" id="completeCurrent">Clôturer le dossier</button></div><nav class="tabs"><button class="tab active" data-tab="overview">Synthèse</button><button class="tab" data-tab="contacts">Intervenants</button><button class="tab" data-tab="documents">Documents</button><button class="tab" data-tab="work">Travaux & observations</button><button class="tab" data-tab="history">Historique</button></nav><div id="bookContent" class="book-content"></div></section></div>
-<div class="overlay" id="settingsDialog"><section class="dialog"><div class="dialog-head"><div><p class="eyebrow">CONFIGURATION</p><h2>Paramètres de stockage</h2></div><button class="x-close" data-close="settingsDialog">×</button></div><form id="settingsForm" class="form-grid"><label class="span-2">URL de l'application Web Google Apps Script<input id="googleUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></label><label class="span-2">رمز الحماية / Secret partagé<input id="googleToken" type="password" placeholder="Le même code que dans Apps Script"></label><p class="hint span-2">Liez votre Google Sheet en déployant le script fourni dans le dossier google-apps-script. L'identifiant du classeur fourni est déjà prérempli dans le script.</p><div class="dialog-actions span-2"><button type="button" class="btn btn-soft" data-close="settingsDialog">Annuler</button><button class="btn btn-primary">Enregistrer</button></div></form></section></div>
-<div class="toast" id="toast" role="status"></div><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/app.js"></script></body></html>
+
+<!-- ══════════════════════════════════════════════════════════════
+     GATE SCREEN – Storage Mode Selection
+══════════════════════════════════════════════════════════════ -->
+<div id="modeGate" class="gate">
+  <div class="gate-bg"></div>
+  <div class="gate-card">
+
+    <div class="gate-brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" stroke="white" stroke-width="1.2" stroke-opacity=".55"/>
+          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="1.5" fill="white"/>
+          <line x1="12" y1="2" x2="12" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="12" y1="16" x2="12" y2="22" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="2" y1="12" x2="8" y2="12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="16" y1="12" x2="22" y2="12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <span class="eyebrow" data-i18n="gate.eyebrow">ESPACE PROFESSIONNEL</span>
+        <h1 data-i18n="gate.name">TOUAHRIA RADHWANE</h1>
+        <h2 data-i18n="gate.title">Ingénieur d'État en Sciences Géodésiques</h2>
+      </div>
+    </div>
+
+    <p class="muted" data-i18n="gate.subtitle">Choisissez le mode de stockage pour cette session.</p>
+
+    <div class="mode-options">
+      <button class="mode-card" data-mode="excel">
+        <div class="mode-icon">
+          <i data-lucide="file-spreadsheet"></i>
+        </div>
+        <b data-i18n="gate.excel">Excel local</b>
+        <small data-i18n="gate.excelDesc">Classeur sur cet appareil</small>
+      </button>
+      <button class="mode-card" data-mode="google">
+        <div class="mode-icon">
+          <i data-lucide="cloud"></i>
+        </div>
+        <b data-i18n="gate.google">Google Sheets</b>
+        <small data-i18n="gate.googleDesc">Accès depuis plusieurs appareils</small>
+      </button>
+    </div>
+
+    <button id="gateSettings" class="link-btn">
+      <i data-lucide="settings"></i>
+      <span data-i18n="gate.configure">Configurer Google Sheets</span>
+    </button>
+
+    <div class="lang-switcher gate-lang" id="gateLangSwitcher">
+      <button class="lang-btn active" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ar">ع</button>
+    </div>
+
+    <p class="tiny" data-i18n="gate.tip">Vous pourrez changer de mode à tout moment depuis la barre supérieure.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     HEADER / TOPBAR
+══════════════════════════════════════════════════════════════ -->
+<header class="topbar">
+  <a class="brand" href="#" aria-label="GeoCadastre Pro">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" stroke="white" stroke-width="1.2" stroke-opacity=".55"/>
+        <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.5"/>
+        <circle cx="12" cy="12" r="1.5" fill="white"/>
+        <line x1="12" y1="2" x2="12" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="12" y1="16" x2="12" y2="22" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2" y1="12" x2="8" y2="12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="16" y1="12" x2="22" y2="12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span>
+      <b>GeoCadastre<span class="brand-pro">Pro</span></b>
+      <small data-i18n="topbar.subtitle">TOUAHRIA RADHWANE · Ingénieur Principal du Cadastre</small>
+    </span>
+  </a>
+
+  <div class="top-actions">
+    <span id="saveState" class="save-state">
+      <span class="dot"></span>
+      <span data-i18n="topbar.local">Local</span>
+    </span>
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher" id="topLangSwitcher">
+      <button class="lang-btn active" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ar">ع</button>
+    </div>
+
+    <!-- Dark / Light Mode Toggle -->
+    <button class="btn btn-icon" id="themeToggle" aria-label="Basculer le thème sombre/clair">
+      <i data-lucide="moon" class="icon-moon"></i>
+      <i data-lucide="sun"  class="icon-sun"></i>
+    </button>
+
+    <button class="btn btn-outline" id="changeMode">
+      <i data-lucide="hard-drive"></i>
+      <span data-i18n="topbar.changeMode">Mode de stockage</span>
+    </button>
+
+    <button class="btn btn-outline" id="settingsBtn">
+      <i data-lucide="settings"></i>
+      <span data-i18n="topbar.settings">Paramètres</span>
+    </button>
+
+    <button class="btn btn-primary" id="exportExcel">
+      <i data-lucide="download"></i>
+      <span data-i18n="topbar.export">Exporter Excel</span>
+    </button>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════════════ -->
+<main class="shell">
+
+  <!-- Welcome / Hero Section -->
+  <section class="welcome">
+    <div class="welcome-content">
+      <span class="eyebrow" data-i18n="dash.eyebrow">TABLEAU DE BORD PROFESSIONNEL</span>
+      <h1 data-i18n="dash.title">Suivi des dossiers cadastraux</h1>
+      <p class="sub" data-i18n="dash.subtitle">Centralisez les dossiers, consultations, intervenants, documents et opérations.</p>
+    </div>
+    <button class="btn btn-primary btn-add" id="addFile">
+      <i data-lucide="plus-circle"></i>
+      <span data-i18n="dash.newFile">Nouveau dossier</span>
+    </button>
+  </section>
+
+  <!-- Statistics Cards -->
+  <section class="stats" aria-label="Statistiques">
+    <article class="stat">
+      <div class="stat-icon blue">
+        <i data-lucide="folder-open"></i>
+      </div>
+      <div class="stat-body">
+        <small data-i18n="stats.total">Total dossiers</small>
+        <strong id="statTotal" class="counter-val">0</strong>
+      </div>
+    </article>
+
+    <article class="stat">
+      <div class="stat-icon green">
+        <i data-lucide="check-circle-2"></i>
+      </div>
+      <div class="stat-body">
+        <small data-i18n="stats.done">Terminés</small>
+        <strong id="statDone" class="counter-val">0</strong>
+      </div>
+    </article>
+
+    <article class="stat">
+      <div class="stat-icon amber">
+        <i data-lucide="clock"></i>
+      </div>
+      <div class="stat-body">
+        <small data-i18n="stats.inProgress">En cours</small>
+        <strong id="statProgress" class="counter-val">0</strong>
+      </div>
+    </article>
+
+    <article class="stat">
+      <div class="stat-icon red">
+        <i data-lucide="alert-triangle"></i>
+      </div>
+      <div class="stat-body">
+        <small data-i18n="stats.late">En retard</small>
+        <strong id="statLate" class="counter-val">0</strong>
+      </div>
+    </article>
+
+    <article class="stat">
+      <div class="stat-icon violet">
+        <i data-lucide="activity"></i>
+      </div>
+      <div class="stat-body">
+        <small data-i18n="stats.interventions">Interventions</small>
+        <strong id="statActions" class="counter-val">0</strong>
+      </div>
+    </article>
+  </section>
+
+  <!-- Status Distribution Chart -->
+  <section class="panel chart-section">
+    <div class="panel-heading">
+      <div>
+        <h2>
+          <i data-lucide="pie-chart" class="panel-icon"></i>
+          <span data-i18n="chart.title">Répartition des statuts</span>
+        </h2>
+        <p data-i18n="chart.subtitle">Distribution des dossiers par statut actuel</p>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="statusChart" aria-label="Graphique de répartition des statuts"></canvas>
+      <p class="chart-empty-msg" id="chartEmptyMsg" style="display:none" data-i18n="chart.empty">Ajoutez des dossiers pour afficher le graphique.</p>
+    </div>
+  </section>
+
+  <!-- Files Registry Panel -->
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>
+          <i data-lucide="book-open" class="panel-icon"></i>
+          <span data-i18n="table.title">Registre des dossiers</span>
+        </h2>
+        <p data-i18n="table.subtitle">Recherche par IL_NO_NAT, organisme, opération ou demandeur.</p>
+      </div>
+      <span class="counter" id="resultCount">0 dossier</span>
+    </div>
+
+    <div class="filters">
+      <div class="search-wrap">
+        <i data-lucide="search" class="search-icon"></i>
+        <input id="searchInput" type="search" placeholder="Rechercher un dossier..." data-i18n-ph="table.search">
+      </div>
+      <select id="statusFilter">
+        <option value="" data-i18n="filter.allStatus">Tous les statuts</option>
+        <option>Nouveau</option>
+        <option>En cours</option>
+        <option>Urgent</option>
+        <option>En retard</option>
+        <option>Terminé</option>
+      </select>
+      <select id="operationFilter">
+        <option value="" data-i18n="filter.allOps">Toutes les opérations</option>
+        <option>Consultations</option>
+        <option>Partage</option>
+        <option>Fusion</option>
+        <option>Rectification</option>
+        <option>Création</option>
+      </select>
+      <button class="btn btn-soft" id="resetFilters">
+        <i data-lucide="x-circle"></i>
+        <span data-i18n="filter.reset">Réinitialiser</span>
+      </button>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="col.order">N° ordre</th>
+            <th data-i18n="col.ilNoNat">IL_NO_NAT</th>
+            <th data-i18n="col.org">Organisme</th>
+            <th data-i18n="col.op">Opération</th>
+            <th data-i18n="col.requester">Demandeur</th>
+            <th data-i18n="col.received">Réception</th>
+            <th data-i18n="col.deadline">Échéance</th>
+            <th data-i18n="col.status">Statut</th>
+            <th data-i18n="col.actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="fileRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Bottom Grid: Reminders + Recent Activity -->
+  <section class="bottom-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>
+            <i data-lucide="bell" class="panel-icon"></i>
+            <span data-i18n="upcoming.title">Relances à venir</span>
+          </h2>
+          <p data-i18n="upcoming.subtitle">Prochaines échéances et rappels.</p>
+        </div>
+      </div>
+      <div id="upcomingList" class="activity-list"></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>
+            <i data-lucide="history" class="panel-icon"></i>
+            <span data-i18n="recent.title">Dernières interventions</span>
+          </h2>
+          <p data-i18n="recent.subtitle">Historique récent des actions enregistrées.</p>
+        </div>
+      </div>
+      <div id="recentList" class="activity-list"></div>
+    </article>
+  </section>
+
+  <!-- Data Management Panel -->
+  <section class="panel data-panel">
+    <div>
+      <h2>
+        <i data-lucide="database" class="panel-icon"></i>
+        <span data-i18n="data.title">Gestion des données</span>
+      </h2>
+      <p id="storageDescription" data-i18n="data.subtitle">Choisissez un mode de stockage depuis la barre supérieure.</p>
+    </div>
+    <div class="data-actions">
+      <label class="btn btn-soft file-label">
+        <i data-lucide="upload"></i>
+        <span data-i18n="data.import">Importer Excel</span>
+        <input id="importExcel" type="file" accept=".xlsx,.xls,.csv" hidden>
+      </label>
+      <button class="btn btn-outline" id="backupJson">
+        <i data-lucide="archive"></i>
+        <span data-i18n="data.backup">Sauvegarde JSON</span>
+      </button>
+      <button class="btn btn-outline" id="connectExcel">
+        <i data-lucide="link-2"></i>
+        <span data-i18n="data.link">Lier / créer un classeur Excel</span>
+      </button>
+      <button class="btn btn-danger-soft" id="clearData">
+        <i data-lucide="trash-2"></i>
+        <span data-i18n="data.clear">Effacer les données locales</span>
+      </button>
+    </div>
+    <p class="hint" id="excelHint" data-i18n="data.hint">Excel : choisissez un classeur pour enregistrer automatiquement lorsque le navigateur le permet. Google Sheets : configurez l'URL Apps Script.</p>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" stroke-opacity=".6"/>
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          <line x1="12" y1="2" x2="12" y2="8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="12" y1="16" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="16" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span>GeoCadastre Pro</span>
+      </div>
+      <p data-i18n="footer.text">TOUAHRIA RADHWANE · Application personnelle de suivi cadastral · Ingénieur Principal du Cadastre</p>
+    </div>
+  </footer>
+</main>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     DIALOG – New / Edit File
+══════════════════════════════════════════════════════════════ -->
+<div class="overlay" id="fileDialog">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog-head">
+      <div>
+        <span class="eyebrow">REGISTRE CADASTRAL</span>
+        <h2 id="dialogTitle">Nouveau dossier</h2>
+      </div>
+      <button class="x-close" data-close="fileDialog" aria-label="Fermer">×</button>
+    </div>
+
+    <form id="fileForm" class="form-grid" novalidate>
+      <input type="hidden" id="recordId">
+
+      <label>
+        N° d'ordre
+        <input id="orderNo" placeholder="Ex : 001">
+      </label>
+
+      <label>
+        Organisme
+        <input id="organization" placeholder="Administration, étude notariale…">
+      </label>
+
+      <label class="span-2">
+        IL_NO_NAT / Référence <em>*</em>
+        <input id="ilNoNat" required placeholder="Identifiant national de l'immeuble">
+      </label>
+
+      <label>
+        Type d'opération
+        <select id="operation">
+          <option>Consultations</option>
+          <option>Partage</option>
+          <option>Fusion</option>
+          <option>Rectification</option>
+          <option>Création</option>
+        </select>
+      </label>
+
+      <label>
+        Date de réception
+        <input id="received" type="date" required>
+      </label>
+
+      <label>
+        Délai de traitement (jours)
+        <input id="delay" type="number" min="1" value="10" required>
+      </label>
+
+      <label>
+        Demandeur / ingénieur
+        <input id="requester" placeholder="Nom du demandeur">
+      </label>
+
+      <label class="span-2">
+        Lien / chemin / référence du dossier
+        <input id="path" placeholder="Chemin du fichier ou référence numérique">
+      </label>
+
+      <label class="span-2">
+        Observation initiale
+        <textarea id="notes" rows="3" placeholder="Notes d'entrée…"></textarea>
+      </label>
+
+      <div class="notice span-2">
+        <strong>Note :</strong> Le statut est calculé automatiquement à partir de la date de réception et du délai. Pour classer le dossier « Terminé », utilisez le bouton de clôture dans son carnet de suivi.
+      </div>
+
+      <div class="dialog-actions span-2">
+        <button type="button" class="btn btn-soft" data-close="fileDialog">Annuler</button>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="save"></i>
+          Enregistrer le dossier
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     DIALOG – Notebook / Carnet de Suivi
+══════════════════════════════════════════════════════════════ -->
+<div class="overlay" id="notebookDialog">
+  <section class="dialog dialog-wide" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+    <div class="dialog-head">
+      <div>
+        <span class="eyebrow">CARNET DE SUIVI PROFESSIONNEL</span>
+        <h2 id="bookTitle">Dossier</h2>
+        <p class="dialog-sub" id="bookMeta"></p>
+      </div>
+      <button class="x-close" data-close="notebookDialog" aria-label="Fermer">×</button>
+    </div>
+
+    <div class="book-toolbar">
+      <span id="bookStatus" class="status-pill">Nouveau</span>
+      <button class="btn btn-outline" id="editCurrent">
+        <i data-lucide="pencil"></i>
+        Modifier les informations
+      </button>
+      <button class="btn btn-success" id="completeCurrent">
+        <i data-lucide="check-circle-2"></i>
+        Clôturer le dossier
+      </button>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="overview" role="tab">
+        <i data-lucide="layout-dashboard"></i>
+        Synthèse
+      </button>
+      <button class="tab" data-tab="contacts" role="tab">
+        <i data-lucide="users"></i>
+        Intervenants
+      </button>
+      <button class="tab" data-tab="documents" role="tab">
+        <i data-lucide="file-text"></i>
+        Documents
+      </button>
+      <button class="tab" data-tab="work" role="tab">
+        <i data-lucide="wrench"></i>
+        Travaux &amp; observations
+      </button>
+      <button class="tab" data-tab="history" role="tab">
+        <i data-lucide="history"></i>
+        Historique
+      </button>
+    </nav>
+
+    <div id="bookContent" class="book-content"></div>
+  </section>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     DIALOG – Settings (Google Sheets)
+══════════════════════════════════════════════════════════════ -->
+<div class="overlay" id="settingsDialog">
+  <section class="dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head">
+      <div>
+        <span class="eyebrow">CONFIGURATION</span>
+        <h2>Paramètres de stockage</h2>
+      </div>
+      <button class="x-close" data-close="settingsDialog" aria-label="Fermer">×</button>
+    </div>
+
+    <form id="settingsForm" class="form-grid" novalidate>
+      <label class="span-2">
+        URL de l'application Web Google Apps Script
+        <input id="googleUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec">
+      </label>
+
+      <label class="span-2">
+        رمز الحماية / Secret partagé
+        <input id="googleToken" type="password" placeholder="Le même code que dans Apps Script">
+      </label>
+
+      <p class="hint span-2">Liez votre Google Sheet en déployant le script fourni dans le dossier <code>google-apps-script</code>. L'identifiant du classeur est prérempli dans le script.</p>
+
+      <div class="dialog-actions span-2">
+        <button type="button" class="btn btn-soft" data-close="settingsDialog">Annuler</button>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="save"></i>
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
+
+<!-- Toast Notification -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════════ -->
+<!-- SheetJS / XLSX -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<!-- Application -->
+<script src="assets/js/app.js"></script>
+</body>
+</html>
